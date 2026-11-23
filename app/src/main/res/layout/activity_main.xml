@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="#F1F6F2">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="28dp">
+        <!-- Application Branding -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:paddingTop="35dp"
+            android:paddingBottom="35dp">
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="75dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/aof_logo"
+                android:contentDescription="@string/logo_desc" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="Amruth AgriReach"
+                android:textColor="#174B35"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Connecting people. Growing agriculture."
+                android:textColor="#557363"
+                android:textSize="13sp" />
+        </LinearLayout>
+        <!-- Login Form -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#FFFFFF"
+            android:padding="22dp">
+
+            <TextView
+                android:layout_width="171dp"
+                android:layout_height="wrap_content"
+                android:text="Welcome back!"
+                android:textColor="#193D2D"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="25dp"
+                android:text="Sign in to continue to your account."
+                android:textColor="#64756B"
+                android:textSize="14sp" />
+            <!-- Username -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Username"
+                android:textColor="#33483C"
+                android:textStyle="bold"
+                android:textSize="14sp" />
+            <EditText
+                android:id="@+id/usernameInput"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="20dp"
+                android:hint="Enter your username"
+                android:inputType="text"
+                android:singleLine="true"
+                android:padding="12dp"
+                android:textSize="15sp" />
+            <!-- Password -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Password"
+                android:textColor="#33483C"
+                android:textStyle="bold"
+                android:textSize="14sp" />
+            <EditText
+                android:id="@+id/passwordInput"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="25dp"
+                android:hint="Enter your password"
+                android:inputType="textPassword"
+                android:singleLine="true"
+                android:padding="12dp"
+                android:textSize="15sp" />
+            <!-- Login Button -->
+            <Button
+                android:id="@+id/loginButton"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:backgroundTint="#176B45"
+                android:text="LOGIN"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+        </LinearLayout>
+        <!-- Footer -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="AgriReach  |  Your agricultural workspace"
+            android:textColor="#75867B"
+            android:textSize="12sp" />
+    </LinearLayout>
+</ScrollView>
