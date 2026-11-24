@@ -1,4 +1,6 @@
-package com.agrireach.app.network;
+package com.agrireach.app.data.remote.api;
+
+import com.agrireach.app.data.remote.dto.LoginResponse;
 
 import org.json.JSONObject;
 import java.io.BufferedReader;

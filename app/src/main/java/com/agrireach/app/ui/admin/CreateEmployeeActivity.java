@@ -1,4 +1,4 @@
-package com.agrireach.app;
+package com.agrireach.app.ui.admin;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -6,7 +6,9 @@ import android.os.Looper;
 import android.widget.Button;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import com.agrireach.app.network.EmployeeApi;
+
+import com.agrireach.app.R;
+import com.agrireach.app.data.remote.api.EmployeeApi;
 import com.google.android.material.textfield.TextInputEditText;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

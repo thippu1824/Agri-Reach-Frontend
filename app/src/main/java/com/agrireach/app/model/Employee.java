@@ -1,4 +1,4 @@
-package com.agrireach.app;
+package com.agrireach.app.model;
 public class Employee {
     private String employeeCode;
     private String fullName;

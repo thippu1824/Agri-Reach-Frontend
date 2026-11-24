@@ -1,4 +1,4 @@
-package com.agrireach.app;
+package com.agrireach.app.ui.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,10 +8,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import com.agrireach.app.network.ApiConfig;
-import com.agrireach.app.network.AuthApi;
-import com.agrireach.app.network.AuthSession;
-import com.agrireach.app.network.LoginResponse;
+
+import com.agrireach.app.R;
+import com.agrireach.app.core.network.ApiConfig;
+import com.agrireach.app.data.remote.api.AuthApi;
+import com.agrireach.app.core.session.AuthSession;
+import com.agrireach.app.data.remote.dto.LoginResponse;
+import com.agrireach.app.ui.admin.AdminDashboardActivity;
+import com.agrireach.app.ui.employee.EmployeeDashboardActivity;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 

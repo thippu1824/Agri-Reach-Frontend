@@ -1,4 +1,6 @@
-package com.agrireach.app.network;
+package com.agrireach.app.core.session;
+
+import com.agrireach.app.data.remote.dto.LoginResponse;
 
 public class AuthSession {
     private static String accessToken;

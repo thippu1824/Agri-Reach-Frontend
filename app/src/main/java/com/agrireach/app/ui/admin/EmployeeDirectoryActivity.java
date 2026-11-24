@@ -1,4 +1,4 @@
-package com.agrireach.app;
+package com.agrireach.app.ui.admin;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,7 +10,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import com.agrireach.app.network.EmployeeApi;
+
+import com.agrireach.app.R;
+import com.agrireach.app.data.remote.api.EmployeeApi;
+import com.agrireach.app.model.Employee;
 import com.google.android.material.card.MaterialCardView;
 import java.util.List;
 import java.util.concurrent.ExecutorService;

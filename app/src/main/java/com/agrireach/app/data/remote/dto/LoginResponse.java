@@ -1,4 +1,4 @@
-package com.agrireach.app.network;
+package com.agrireach.app.data.remote.dto;
 
 import org.json.JSONObject;
 

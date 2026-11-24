@@ -1,6 +1,7 @@
-package com.agrireach.app;
+package com.agrireach.app.model;
 import android.content.Context;
 import android.content.SharedPreferences;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.ArrayList;

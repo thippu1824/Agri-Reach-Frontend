@@ -1,11 +1,14 @@
-package com.agrireach.app;
+package com.agrireach.app.ui.employee;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import com.agrireach.app.network.AuthSession;
+
+import com.agrireach.app.ui.auth.MainActivity;
+import com.agrireach.app.R;
+import com.agrireach.app.core.session.AuthSession;
 
 public class EmployeeDashboardActivity extends AppCompatActivity {
     private TextView welcomeNameText;

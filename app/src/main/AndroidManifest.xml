@@ -15,7 +15,7 @@
         android:theme="@style/Theme.AgriReach"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.auth.MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -25,23 +25,31 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AdminDashboardActivity"
+            android:name=".ui.admin.AdminDashboardActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".CreateEmployeeActivity"
+            android:name=".ui.admin.CreateEmployeeActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".EmployeeDirectoryActivity"
+            android:name=".ui.admin.EmployeeDirectoryActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".EmployeeDashboardActivity"
+            android:name=".ui.employee.EmployeeDashboardActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".ChangePasswordActivity"
+            android:name=".ui.auth.ChangePasswordActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.admin.UploadVideoActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.admin.AdminVideosActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
     </application>

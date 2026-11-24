@@ -377,6 +377,62 @@
                     app:elevation="0dp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
+
+        <!-- Upload Training Video -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="1dp"
+            app:strokeColor="#E8EEE7"
+            app:strokeWidth="1dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="18dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🎥  Training Videos"
+                    android:textColor="#243C2A"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:text="Upload and manage employee training videos."
+                    android:textColor="#778078"
+                    android:textSize="14sp" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/viewVideosButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp"
+                    android:layout_marginTop="16dp"
+                    android:text="View Videos"
+                    android:textAllCaps="false"
+                    android:textSize="15sp"
+                    android:textColor="#287D43"
+                    app:backgroundTint="#EAF4EC"
+                    app:cornerRadius="14dp"
+                    app:elevation="0dp" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/uploadVideoButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Upload Training Video"
+                    android:textAllCaps="false"
+                    android:textSize="15sp"
+                    app:backgroundTint="#287D43"
+                    app:cornerRadius="14dp"
+                    app:elevation="0dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
         <!-- Logout -->
         <com.google.android.material.button.MaterialButton
 

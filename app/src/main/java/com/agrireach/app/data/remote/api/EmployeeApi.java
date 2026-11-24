@@ -1,6 +1,8 @@
-package com.agrireach.app.network;
+package com.agrireach.app.data.remote.api;
 
-import com.agrireach.app.Employee;
+import com.agrireach.app.model.Employee;
+import com.agrireach.app.core.network.ApiConfig;
+import com.agrireach.app.core.session.AuthSession;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

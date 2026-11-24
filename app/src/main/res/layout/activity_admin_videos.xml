@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F4F7F2"
+    android:padding="20dp">
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/backButton"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:text="‹"
+            android:textSize="30sp"
+            android:textColor="#247A3C"
+            android:padding="0dp"
+            app:backgroundTint="#E5F1E7"
+            app:cornerRadius="14dp"
+            app:elevation="0dp" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="14dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Video Library"
+                android:textColor="#194F2C"
+                android:textSize="23sp"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Manage your training content"
+                android:textColor="#718071"
+                android:textSize="13sp" />
+        </LinearLayout>
+    </LinearLayout>
+    <!-- Intro Card -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:cardBackgroundColor="#246B3B"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="0dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Training Videos"
+                android:textColor="#FFFFFF"
+                android:textSize="19sp"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Organize, review and manage all your uploaded learning videos in one place."
+                android:textColor="#E0F0E3"
+                android:textSize="13sp"
+                android:lineSpacingExtra="3dp" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+    <!-- Search -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginTop="20dp"
+        app:cardBackgroundColor="#FFFFFF"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="0dp"
+        app:strokeColor="#E4EBE2"
+        app:strokeWidth="1dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="15dp"
+            android:paddingEnd="12dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="⌕"
+                android:textColor="#54815D"
+                android:textSize="25sp" />
+            <EditText
+                android:id="@+id/searchVideosEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:background="@null"
+                android:hint="Search training videos"
+                android:singleLine="true"
+                android:inputType="text"
+                android:textColor="#263B2B"
+                android:textColorHint="#9AA89B"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+    <!-- Status Filters -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/allVideosButton"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:text="All Videos"
+            android:textAllCaps="false"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:minHeight="0dp"
+            android:padding="0dp"
+            app:backgroundTint="#287D43"
+            app:cornerRadius="13dp"
+            app:elevation="0dp"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/activeVideosButton"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="Active"
+            android:textAllCaps="false"
+            android:textSize="12sp"
+            android:textColor="#287D43"
+            android:minHeight="0dp"
+            android:padding="0dp"
+            app:backgroundTint="#E5F1E7"
+            app:cornerRadius="13dp"
+            app:elevation="0dp"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/pendingVideosButton"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="Pending"
+            android:textAllCaps="false"
+            android:textSize="12sp"
+            android:textColor="#287D43"
+            android:minHeight="0dp"
+            android:padding="0dp"
+            app:backgroundTint="#E5F1E7"
+            app:cornerRadius="13dp"
+            app:elevation="0dp"/>
+    </LinearLayout>
+    <!-- Video Count -->
+    <TextView
+        android:id="@+id/videoCountTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:text="YOUR VIDEOS"
+        android:textColor="#647765"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.08" />
+    <!-- Video List and Empty State -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="10dp">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/videosRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="12dp" />
+        <TextView
+            android:id="@+id/emptyVideosTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="24dp"
+            android:text="No training videos found"
+            android:textColor="#718071"
+            android:textSize="15sp"
+            android:visibility="gone" />
+    </FrameLayout>
+</LinearLayout>
