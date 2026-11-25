@@ -98,6 +98,38 @@ public class AdminVideosActivity extends AppCompatActivity {
         videoAdapter.setPlayListener(video -> {
             playOfflineVideo(video);
         });
+
+        // Connect video card click with the Activity
+        videoAdapter.setDetailsListener(video -> {
+            openVideoDetails(video);
+        });
+    }
+
+    private void openVideoDetails(VideoResponse video) {
+        if (video == null || video.getId() == null) {
+            Toast.makeText(
+                    this,
+                    "Invalid video information",
+                    Toast.LENGTH_SHORT
+            ).show();
+            return;
+        }
+        Intent intent = new Intent(
+                AdminVideosActivity.this,
+                AdminVideoDetailsActivity.class
+        );
+        intent.putExtra("video_id", video.getId());
+        intent.putExtra("video_title", video.getTitle());
+        intent.putExtra("video_description", video.getDescription());
+        intent.putExtra("video_status", video.getStatus());
+        intent.putExtra("video_file_size", video.getFileSize());
+        if (video.getDurationSeconds() != null) {
+            intent.putExtra(
+                    "video_duration",
+                    video.getDurationSeconds()
+            );
+        }
+        startActivity(intent);
     }
 
 

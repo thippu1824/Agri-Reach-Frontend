@@ -55,6 +55,14 @@
         <activity
             android:name=".ui.admin.OfflineVideoPlayerActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.admin.OnlineVideoPlayerActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.admin.AdminVideoDetailsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

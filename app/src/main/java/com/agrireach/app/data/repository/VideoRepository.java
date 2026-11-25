@@ -249,6 +249,50 @@ public class VideoRepository {
         });
     }
 
+    public interface PlaybackUrlCallback {
+        void onSuccess(String playbackUrl);
+        void onFailure(String message);
+    }
+
+    public void getStreamingUrl(String videoId, PlaybackUrlCallback callback) {
+        Call<VideoDownloadResponse> apiCall =
+                videoApi.getDownloadUrl(videoId);
+        apiCall.enqueue(new Callback<VideoDownloadResponse>() {
+            @Override
+            public void onResponse(
+                    Call<VideoDownloadResponse> call,
+                    Response<VideoDownloadResponse> response
+            ) {
+                if (!response.isSuccessful() || response.body() == null) {
+                    callback.onFailure(
+                            "Unable to generate playback URL. HTTP "
+                                    + response.code()
+                    );
+                    return;
+                }
+                VideoDownloadResponse details = response.body();
+                String playbackUrl = details.getDownloadUrl();
+                if (playbackUrl == null || playbackUrl.trim().isEmpty()) {
+                    callback.onFailure(
+                            "Invalid playback URL received from server"
+                    );
+                    return;
+                }
+                callback.onSuccess(playbackUrl);
+            }
+            @Override
+            public void onFailure(
+                    Call<VideoDownloadResponse> call,
+                    Throwable t
+            ) {
+                callback.onFailure(
+                        "Playback URL request failed: "
+                                + t.getMessage()
+                );
+            }
+        });
+    }
+
     public interface DownloadCallback {
 
         void onProgress(int progress);

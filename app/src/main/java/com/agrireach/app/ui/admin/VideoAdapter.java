@@ -40,6 +40,10 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
         void onPlayOfflineClick(VideoResponse video);
     }
 
+    public interface VideoDetailsListener {
+        void onVideoDetailsClick(VideoResponse video);
+    }
+
     private VideoDownloadListener downloadListener;
 
     public void setDownloadListener(VideoDownloadListener listener) {
@@ -51,6 +55,13 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
     public void setPlayListener(VideoPlayListener listener) {
         this.playListener = listener;
     }
+
+    private VideoDetailsListener detailsListener;
+
+    public void setDetailsListener(VideoDetailsListener detailsListener) {
+        this.detailsListener = detailsListener;
+    }
+
     private final List<VideoResponse> videoList = new ArrayList<>();
 
     public void setVideos(List<VideoResponse> videos) {
@@ -73,10 +84,8 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
     }
 
     @Override
-    public void onBindViewHolder(
-            @NonNull VideoViewHolder holder,
-            int position
-    ) {
+    public void onBindViewHolder(@NonNull VideoViewHolder holder, int position) {
+
         VideoResponse video = videoList.get(position);
         holder.videoTitleTextView.setText(video.getTitle());
         String description = video.getDescription();
@@ -158,6 +167,13 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
 
             if (playListener != null) {
                 playListener.onPlayOfflineClick(video);
+            }
+        });
+
+        // Open video details when the card is tapped
+        holder.itemView.setOnClickListener(view -> {
+            if (detailsListener != null) {
+                detailsListener.onVideoDetailsClick(video);
             }
         });
 
