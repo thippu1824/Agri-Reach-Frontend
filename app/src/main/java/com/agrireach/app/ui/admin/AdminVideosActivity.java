@@ -8,7 +8,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,7 +20,7 @@ import com.agrireach.app.core.network.RetrofitClient;
 import com.agrireach.app.data.remote.api.VideoApi;
 import com.agrireach.app.data.remote.dto.VideoResponse;
 import com.agrireach.app.data.repository.VideoRepository;
-
+import android.content.Intent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -36,6 +38,9 @@ public class AdminVideosActivity extends AppCompatActivity {
     private VideoAdapter videoAdapter;
     private final List<VideoResponse> allVideos = new ArrayList<>();
     private String selectedFilter = "ALL";
+    // Track active downloads using video ID.
+    private final Map<String, VideoRepository.DownloadTask>
+            activeDownloads = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,14 +68,38 @@ public class AdminVideosActivity extends AppCompatActivity {
                 findViewById(R.id.videosRecyclerView);
     }
 
+
     private void setupRecyclerView() {
+
         videoAdapter = new VideoAdapter();
+
         videosRecyclerView.setLayoutManager(
                 new LinearLayoutManager(this)
         );
+
         videosRecyclerView.setAdapter(videoAdapter);
         videosRecyclerView.setHasFixedSize(false);
+
+        // Connect download button with Activity
+        videoAdapter.setDownloadListener(video -> {
+
+            if (video == null || video.getId() == null) {
+                Toast.makeText(
+                        this,
+                        "Invalid video information",
+                        Toast.LENGTH_SHORT
+                ).show();
+                return;
+            }
+
+            startVideoDownload(video);
+        });
+        // Connect Play Offline button with Activity
+        videoAdapter.setPlayListener(video -> {
+            playOfflineVideo(video);
+        });
     }
+
 
     private void initializeRepository() {
         VideoApi videoApi = RetrofitClient
@@ -196,6 +225,7 @@ public class AdminVideosActivity extends AppCompatActivity {
             }
         }
         videoAdapter.setVideos(filteredVideos);
+        restoreDownloadedStates(filteredVideos);
         videoCountTextView.setText(
                 "Showing " + filteredVideos.size()
                         + " of " + allVideos.size() + " videos"
@@ -216,5 +246,189 @@ public class AdminVideosActivity extends AppCompatActivity {
             emptyVideosTextView.setVisibility(View.GONE);
             videosRecyclerView.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void restoreDownloadedStates(List<VideoResponse> videos) {
+
+        File offlineDirectory = new File(
+                getFilesDir(),
+                "offline-videos"
+        );
+
+        if (!offlineDirectory.exists()) {
+            return;
+        }
+
+        for (VideoResponse video : videos) {
+
+            if (video == null || video.getId() == null) {
+                continue;
+            }
+
+            File offlineFile = new File(
+                    offlineDirectory,
+                    video.getId() + ".mp4"
+            );
+
+            if (offlineFile.exists()
+                    && video.getFileSize() > 0
+                    && offlineFile.length() == video.getFileSize()) {
+
+                videoAdapter.setDownloaded(video.getId());
+            }
+        }
+    }
+
+    private void startVideoDownload(VideoResponse video) {
+
+        String videoId = video.getId();
+
+        // Prevent duplicate downloads
+        if (activeDownloads.containsKey(videoId)) {
+            Toast.makeText(
+                    this,
+                    "This video is already downloading",
+                    Toast.LENGTH_SHORT
+            ).show();
+            return;
+        }
+
+        // Check whether the video is already downloaded
+        File offlineDirectory = new File(
+                getFilesDir(),
+                "offline-videos"
+        );
+
+        File offlineFile = new File(
+                offlineDirectory,
+                videoId + ".mp4"
+        );
+
+        if (offlineFile.exists()
+                && offlineFile.length() == video.getFileSize()
+                && video.getFileSize() > 0) {
+
+            videoAdapter.setDownloaded(videoId);
+
+            Toast.makeText(
+                    this,
+                    "Video already downloaded",
+                    Toast.LENGTH_SHORT
+            ).show();
+
+            return;
+        }
+
+        Toast.makeText(
+                this,
+                "Starting download: " + video.getTitle(),
+                Toast.LENGTH_SHORT
+        ).show();
+
+        VideoRepository.DownloadTask task =
+                videoRepository.downloadVideo(
+                        getApplicationContext(),
+                        videoId,
+                        new VideoRepository.DownloadCallback() {
+
+                            @Override
+                            public void onProgress(int progress) {
+
+                                videoAdapter.setDownloadProgress(
+                                        videoId,
+                                        progress
+                                );
+                            }
+
+                            @Override
+                            public void onSuccess(File downloadedFile) {
+
+                                activeDownloads.remove(videoId);
+
+                                videoAdapter.setDownloaded(videoId);
+
+                                Toast.makeText(
+                                        AdminVideosActivity.this,
+                                        "Downloaded successfully: "
+                                                + video.getTitle(),
+                                        Toast.LENGTH_LONG
+                                ).show();
+                            }
+
+                            @Override
+                            public void onFailure(String message) {
+
+                                activeDownloads.remove(videoId);
+
+                                videoAdapter.resetDownload(videoId);
+
+                                Toast.makeText(
+                                        AdminVideosActivity.this,
+                                        message,
+                                        Toast.LENGTH_LONG
+                                ).show();
+                            }
+                        }
+                );
+
+        if (task != null) {
+            activeDownloads.put(videoId, task);
+        }
+    }
+
+    private void playOfflineVideo(VideoResponse video) {
+
+        if (video == null || video.getId() == null) {
+            Toast.makeText(
+                    this,
+                    "Invalid video information",
+                    Toast.LENGTH_SHORT
+            ).show();
+            return;
+        }
+
+        File offlineDirectory = new File(
+                getFilesDir(),
+                "offline-videos"
+        );
+
+        File offlineFile = new File(
+                offlineDirectory,
+                video.getId() + ".mp4"
+        );
+
+        // Verify that the downloaded video exists and is complete
+        if (!offlineFile.exists()
+                || !offlineFile.isFile()
+                || offlineFile.length() == 0
+                || video.getFileSize() <= 0
+                || offlineFile.length() != video.getFileSize()) {
+
+            Toast.makeText(
+                    this,
+                    "Offline video not found or incomplete. Please download again.",
+                    Toast.LENGTH_LONG
+            ).show();
+
+            videoAdapter.resetDownload(video.getId());
+            return;
+        }
+
+        Intent intent = new Intent(
+                AdminVideosActivity.this,
+                OfflineVideoPlayerActivity.class
+        );
+
+        intent.putExtra(
+                OfflineVideoPlayerActivity.EXTRA_VIDEO_PATH,
+                offlineFile.getAbsolutePath()
+        );
+
+        intent.putExtra(
+                OfflineVideoPlayerActivity.EXTRA_VIDEO_TITLE,
+                video.getTitle()
+        );
+
+        startActivity(intent);
     }
 }

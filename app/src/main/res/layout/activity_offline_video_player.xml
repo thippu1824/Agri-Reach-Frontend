@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#FFFFFF">
+
+        <TextView
+            android:id="@+id/offlineVideoTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="Offline Video"
+            android:textColor="#194F2C"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingBottom="10dp"
+            android:text="● Available offline"
+            android:textColor="#287D43"
+            android:textSize="12sp" />
+
+        <androidx.media3.ui.PlayerView
+            android:id="@+id/offlinePlayerView"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            app:use_controller="true"
+            app:resize_mode="fit"
+            app:show_buffering="when_playing" />
+
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

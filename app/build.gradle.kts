@@ -42,6 +42,11 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 //    implementation("org.slf4j:slf4j-api:2.0.16")
 //    implementation("com.jakewharton.timber:timber:5.0.1")
+// Media3 ExoPlayer - Offline video playback
+    implementation("androidx.media3:media3-exoplayer:1.11.1")
+
+// Media3 Player UI
+    implementation("androidx.media3:media3-ui:1.11.1")
     testImplementation(libs.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.ext.junit)

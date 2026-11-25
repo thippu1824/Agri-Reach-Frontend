@@ -2,13 +2,16 @@ package com.agrireach.app.data.repository;
 
 import android.content.ContentResolver;
 import android.net.Uri;
+import android.content.Context;
 
+import com.agrireach.app.data.remote.dto.VideoDownloadResponse;
 import com.agrireach.app.data.remote.dto.VideoResponse;
 import com.agrireach.app.data.storage.StorageTransferClient;
 import com.agrireach.app.data.remote.api.VideoApi;
 import com.agrireach.app.data.remote.dto.VideoUploadRequest;
 import com.agrireach.app.data.remote.dto.VideoUploadResponse;
 
+import java.io.File;
 import java.util.List;
 
 import retrofit2.Call;
@@ -244,5 +247,161 @@ public class VideoRepository {
                 );
             }
         });
+    }
+
+    public interface DownloadCallback {
+
+        void onProgress(int progress);
+
+        void onSuccess(File downloadedFile);
+
+        void onFailure(String message);
+    }
+
+
+
+    public DownloadTask downloadVideo(
+            Context context,
+            String videoId,
+            DownloadCallback callback
+    ) {
+
+        DownloadTask task = new DownloadTask();
+
+        Call<VideoDownloadResponse> apiCall =
+                videoApi.getDownloadUrl(videoId);
+
+        task.setApiCall(apiCall);
+
+        apiCall.enqueue(new Callback<VideoDownloadResponse>() {
+
+            @Override
+            public void onResponse(
+                    Call<VideoDownloadResponse> call,
+                    Response<VideoDownloadResponse> response
+            ) {
+
+                if (task.isCancelled()) {
+                    return;
+                }
+
+                if (!response.isSuccessful() || response.body() == null) {
+                    callback.onFailure(
+                            "Unable to generate download URL. HTTP "
+                                    + response.code()
+                    );
+                    return;
+                }
+
+                VideoDownloadResponse details = response.body();
+
+                if (details.getDownloadUrl() == null
+                        || details.getDownloadUrl().isEmpty()) {
+                    callback.onFailure("Invalid download URL");
+                    return;
+                }
+
+                try {
+
+                    okhttp3.Call storageCall =
+                            storageTransferClient.downloadVideo(
+                                    context,
+                                    videoId,
+                                    details.getDownloadUrl(),
+                                    details.getFileSize(),
+                                    new StorageTransferClient.TransferCallback() {
+
+                                        @Override
+                                        public void onProgress(int progress) {
+                                            if (!task.isCancelled()) {
+                                                callback.onProgress(progress);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onSuccess() {
+                                            if (!task.isCancelled()) {
+                                                File downloadedFile = new File(
+                                                        context.getFilesDir(),
+                                                        "offline-videos/"
+                                                                + videoId + ".mp4"
+                                                );
+
+                                                callback.onSuccess(downloadedFile);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(String message) {
+                                            if (!task.isCancelled()) {
+                                                callback.onFailure(message);
+                                            }
+                                        }
+                                    }
+                            );
+
+                    task.setStorageCall(storageCall);
+
+                } catch (Exception e) {
+                    if (!task.isCancelled()) {
+                        callback.onFailure(
+                                "Unable to start download: " + e.getMessage()
+                        );
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(
+                    Call<VideoDownloadResponse> call,
+                    Throwable t
+            ) {
+                if (!task.isCancelled()) {
+                    callback.onFailure(
+                            "Download URL request failed: " + t.getMessage()
+                    );
+                }
+            }
+        });
+
+        return task;
+    }
+
+
+    public static class DownloadTask {
+
+        private volatile retrofit2.Call<?> apiCall;
+        private volatile okhttp3.Call storageCall;
+        private volatile boolean cancelled;
+
+        private void setApiCall(retrofit2.Call<?> call) {
+            apiCall = call;
+            if (cancelled && call != null) {
+                call.cancel();
+            }
+        }
+
+        private void setStorageCall(okhttp3.Call call) {
+            storageCall = call;
+            if (cancelled && call != null) {
+                call.cancel();
+            }
+        }
+
+        public void cancel() {
+            cancelled = true;
+
+            if (apiCall != null) {
+                apiCall.cancel();
+            }
+
+            if (storageCall != null) {
+                storageCall.cancel();
+            }
+        }
+
+        public boolean isCancelled() {
+            return cancelled;
+        }
     }
 }

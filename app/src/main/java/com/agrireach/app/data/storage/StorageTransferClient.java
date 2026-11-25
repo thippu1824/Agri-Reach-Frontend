@@ -17,7 +17,11 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okio.BufferedSink;
-
+import android.content.Context;
+import com.agrireach.app.data.remote.dto.VideoDownloadResponse;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 public class StorageTransferClient {
     private static final int BUFFER_SIZE = 8192;
     private final ContentResolver contentResolver;
@@ -142,4 +146,145 @@ public class StorageTransferClient {
         });
         return call;
     }
+
+
+
+    public Call downloadVideo(
+            Context context,
+            String videoId,
+            String downloadUrl,
+            long expectedFileSize,
+            TransferCallback callback
+    ) throws IOException {
+
+        if (context == null || videoId == null || downloadUrl == null
+                || !downloadUrl.startsWith("https://")) {
+            throw new IllegalArgumentException("Invalid download parameters");
+        }
+
+        File directory = new File(context.getFilesDir(), "offline-videos");
+
+        if (!directory.exists() && !directory.mkdirs()) {
+            throw new IOException("Unable to create offline directory");
+        }
+
+        File finalFile = new File(directory, videoId + ".mp4");
+        File tempFile = new File(directory, videoId + ".mp4.part");
+
+        if (finalFile.exists()
+                && finalFile.length() == expectedFileSize) {
+            mainHandler.post(callback::onSuccess);
+            return null;
+        }
+
+        Request request = new Request.Builder()
+                .url(downloadUrl)
+                .get()
+                .build();
+
+        Call call = httpClient.newCall(request);
+
+        call.enqueue(new Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                tempFile.delete();
+
+                mainHandler.post(() ->
+                        callback.onFailure(
+                                call.isCanceled()
+                                        ? "Download cancelled"
+                                        : "Download failed: " + e.getMessage()
+                        )
+                );
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) {
+
+                try (Response ignored = response) {
+
+                    if (!response.isSuccessful() || response.body() == null) {
+                        tempFile.delete();
+                        int status = response.code();
+
+                        mainHandler.post(() ->
+                                callback.onFailure(
+                                        "Download failed. HTTP " + status
+                                )
+                        );
+                        return;
+                    }
+
+                    long totalBytes = response.body().contentLength();
+
+                    try (
+                            java.io.InputStream input =
+                                    response.body().byteStream();
+                            OutputStream output =
+                                    new FileOutputStream(tempFile)
+                    ) {
+
+                        byte[] buffer = new byte[BUFFER_SIZE];
+                        long downloaded = 0;
+                        int bytesRead;
+                        int lastProgress = -1;
+
+                        while ((bytesRead = input.read(buffer)) != -1) {
+
+                            if (call.isCanceled()) {
+                                throw new IOException("Download cancelled");
+                            }
+
+                            output.write(buffer, 0, bytesRead);
+                            downloaded += bytesRead;
+
+                            long total = expectedFileSize > 0
+                                    ? expectedFileSize : totalBytes;
+
+                            if (total > 0) {
+                                int progress = (int) (downloaded * 100 / total);
+
+                                if (progress != lastProgress) {
+                                    lastProgress = progress;
+                                    mainHandler.post(() ->
+                                            callback.onProgress(progress)
+                                    );
+                                }
+                            }
+                        }
+
+                        output.flush();
+
+                        if (expectedFileSize > 0
+                                && downloaded != expectedFileSize) {
+                            throw new IOException(
+                                    "Downloaded file size mismatch"
+                            );
+                        }
+
+                        if (!tempFile.renameTo(finalFile)) {
+                            throw new IOException(
+                                    "Unable to save downloaded video"
+                            );
+                        }
+
+                        mainHandler.post(callback::onSuccess);
+
+                    } catch (IOException e) {
+                        tempFile.delete();
+
+                        mainHandler.post(() ->
+                                callback.onFailure(e.getMessage())
+                        );
+                    }
+
+                }
+            }
+        });
+
+        return call;
+    }
+
+
 }

@@ -52,6 +52,9 @@
             android:name=".ui.admin.AdminVideosActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.admin.OfflineVideoPlayerActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

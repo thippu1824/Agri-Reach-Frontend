@@ -158,5 +158,61 @@
             android:text="↑  Uploaded 24 Nov 2026"
             android:textColor="#899589"
             android:textSize="11sp" />
+
+        <!-- Video Download Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="vertical">
+
+            <!-- Download Progress Bar -->
+            <ProgressBar
+                android:id="@+id/videoDownloadProgressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:max="100"
+                android:progress="0"
+                android:visibility="gone" />
+
+            <!-- Download Progress Text -->
+            <TextView
+                android:id="@+id/videoDownloadProgressText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textSize="11sp"
+                android:textColor="#287D43"
+                android:visibility="gone" />
+
+            <!-- Download Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/downloadVideoButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Download video"
+                android:textAllCaps="false"
+                app:icon="@android:drawable/stat_sys_download"
+                app:iconGravity="textStart"
+                app:backgroundTint="#287D43" />
+            <!-- Play Offline Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/playOfflineVideoButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Play Offline"
+                android:textAllCaps="false"
+                android:visibility="gone"
+                app:icon="@android:drawable/ic_media_play"
+                app:iconGravity="textStart"
+                app:backgroundTint="#E5F1E7"
+                app:iconTint="#287D43"
+                android:textColor="#287D43" />
+
+        </LinearLayout>
+
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

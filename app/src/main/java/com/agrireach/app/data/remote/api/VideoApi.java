@@ -3,7 +3,7 @@ package com.agrireach.app.data.remote.api;
 import com.agrireach.app.data.remote.dto.VideoResponse;
 import com.agrireach.app.data.remote.dto.VideoUploadRequest;
 import com.agrireach.app.data.remote.dto.VideoUploadResponse;
-
+import com.agrireach.app.data.remote.dto.VideoDownloadResponse;
 import java.util.List;
 
 import retrofit2.Call;
@@ -21,4 +21,10 @@ public interface VideoApi {
 
     @GET("api/videos/admin")
     Call<List<VideoResponse>> getAdminVideos();
+
+    @GET("api/videos/{videoId}/download-url")
+    Call<VideoDownloadResponse> getDownloadUrl(
+            @Path("videoId") String videoId
+    );
+
 }
